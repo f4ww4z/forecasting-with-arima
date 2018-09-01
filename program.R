@@ -26,8 +26,11 @@ graph <- ggplot(data = daily_data) +
 ggsave(filename = "cleaned.png", plot = graph, width = 6, height = 4)
 
 # Moving Average (ma) demo
-daily_data$cnt_ma <- ma(daily_data$clean_cnt, order = 7) # weekly moving average
-daily_data$cnt_ma30 = ma(daily_data$clean_cnt, order = 30) # monthly moving average
+
+# weekly moving average
+daily_data$cnt_ma <- ma(daily_data$clean_cnt, order = 7)
+# monthly moving average
+daily_data$cnt_ma30 = ma(daily_data$clean_cnt, order = 30)
 
 graph <- ggplot(data = daily_data) +
   geom_line(aes(x = date, y = clean_cnt, colour = "Counts")) +
@@ -79,7 +82,8 @@ fit_w_season <- auto.arima(deseasonal_cnt, seasonal = TRUE)
 
 # residuals
 png(filename = "fit_w_season_residuals.png", width = 1024, height = 800)
-tsdisplay(residuals(fit_w_season), lag.max = 45, main = "Seasonal Model Residuals")
+tsdisplay(residuals(fit_w_season), lag.max = 45,
+          main = "Seasonal Model Residuals")
 dev.off()
 
 # forecast - better prediction
