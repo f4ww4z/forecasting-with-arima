@@ -91,3 +91,27 @@ fcast <- forecast(fit_w_season, h = 30)
 png(filename = "forecast_seasonal.png", width = 1024, height = 800)
 plot(fcast)
 dev.off()
+
+arima_seasonal <- Arima(daily_ts, order = c(2,1,2), seasonal = c(1,0,1), include.drift = TRUE)
+
+arima_seasonal_pred <- fitted(arima_seasonal)
+
+graph <- ggplot(daily_data) +
+  geom_line(aes(x = date, y = cnt, colour = "Count")) +
+  geom_line(aes(x = date, y = arima_seasonal_pred, colour = "ARIMA prediction")) +
+  scale_x_date('month') +
+  ylab("Bicycle count")
+
+ggsave(filename = "arima_pred_1.png", plot = graph, width = 8, height = 6)
+
+arima_cleaned_seasonal_pred <- fitted(fit_w_season)
+
+mySeq <- seq(from = as.Date("2011-01-01"), to = as.Date("2012-12-25"), by = "day")
+
+graph <- ggplot() +
+  geom_line(aes(x = mySeq, y = arima_cleaned_seasonal_pred, colour = "ARIMA prediction")) +
+  scale_x_date('month') +
+  ylab("Bicycle count")
+
+ggsave(filename = "arima_pred_2.png", plot = graph, width = 8, height = 6)
+
